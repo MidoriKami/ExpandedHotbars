@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1eec9382-bdd5-4303-a0c7-bac999d10468" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitmodules" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.SamplePlugin/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CodeGenerator/HotbarConditionGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/CodeGenerator/JsonMappingGenerator.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Classes/HotbarController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Conditions/ClassJobCondition.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Conditions/ConditionBase.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Configuration/HotbarConfig.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Configuration/SystemConfiguration.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Enums/ConditionFlags.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Enums/ConfigChangedKind.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/ExpandedHotbars.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/ExpandedHotbars.csproj" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Extensions/WindowExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Service.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/System.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Utilities/Config.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Utilities/FileHelpers.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ExpandedHotbars/Windows/ConfigWindow.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/KamiToolKit" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin.slnx" beforeDir="false" afterPath="$PROJECT_DIR$/ExpandedHotbars.slnx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/Configuration.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/Plugin.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/SamplePlugin.csproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/Windows/ConfigWindow.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/Windows/MainWindow.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SamplePlugin/packages.lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/ExpandedHotbars/packages.lock.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "MidoriKami"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/MidoriKami/ExpandedHotbars.git",
+    "accountId": "225b99bb-7cc5-46f3-880c-62c042070487"
+  }
+}]]></component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/CodeGenerator/Class1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Classes/HotbarController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Classes/IDisplayCondition.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Classes/IHotbarCondition.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Classes/Size.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Classes/SystemConfig.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Conditions/ClassJobCondition.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Conditions/ConditionBase.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Configuration/HotbarConfig.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Enums/ConditionFlags.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Enums/ConfigChangedKind.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Extensions/WindowExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/System.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/ExpandedHotbars/Windows/ConfigWindow.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3JHX7N9ixbplNMelapplwmOBdB6" />
+  <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1eec9382-bdd5-4303-a0c7-bac999d10468" name="Changes" comment="" />
+      <created>1789318799081</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1789318799081</updated>
+      <workItem from="1789318800912" duration="8169000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

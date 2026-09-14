@@ -1,0 +1,19 @@
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+    <PropertyGroup>
+        <Version>0.0.0.1</Version>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Name>ExpandedHotbars</Name>
+        <Author>MidoriKami</Author>
+        <Punchline>Add and control an unlimited number of custom additional hotbars.</Punchline>
+        <Description>Create hotbars of any size, spacing, and keybinds, with functions to show and hide these bars dynamically.</Description>
+        <RepoUrl>https://github.com/MidoriKami/ExpandedHotbars</RepoUrl>
+        <Tags>hotbars</Tags>
+        <AcceptsFeedback>false</AcceptsFeedback>
+    </PropertyGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\KamiToolKit\KamiToolKit.csproj" />
+    </ItemGroup>
+</Project>
