@@ -2,7 +2,7 @@
     <PropertyGroup>
         <Version>0.0.0.1</Version>
     </PropertyGroup>
-    
+
     <PropertyGroup>
         <Name>ExpandedHotbars</Name>
         <Author>MidoriKami</Author>
@@ -12,7 +12,11 @@
         <Tags>hotbars</Tags>
         <AcceptsFeedback>false</AcceptsFeedback>
     </PropertyGroup>
-    
+
+    <ItemGroup>
+        <ProjectReference Include="..\CodeGenerator\CodeGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\KamiToolKit\KamiToolKit.csproj" />
     </ItemGroup>

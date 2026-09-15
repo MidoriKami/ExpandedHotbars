@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Dalamud.Game.Command;
+using Dalamud.Interface.GameFonts;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ExpandedHotbars.Classes;
+using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
 using ExpandedHotbars.Extensions;
 using ExpandedHotbars.Windows;
@@ -21,12 +24,23 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
     public async Task LoadAsync(CancellationToken cancellationToken) {
         System.Config = await SystemConfiguration.Load();
 
+        System.ConditionTypes = [
+            .. Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(ConditionBase)))
+                .Where(type => !type.IsAbstract),
+        ];
+
         await KamiToolKitLibrary.InitializeAsync(PluginInterface, "ExpandedHotbars");
 
         await IFramework.Get().Run(() => System.HotbarController = new HotbarController(), cancellationToken);
 
+        System.MeidingerMidFont = PluginInterface.UiBuilder.FontAtlas
+            .NewGameFontHandle(new GameFontStyle(GameFontFamily.MiedingerMid, 208.0f / 10.0f));
+
         System.WindowSystem = new WindowSystem("ExpandedHotbars");
         System.WindowSystem.AddWindow(System.ConfigWindow = new ConfigWindow());
+        System.WindowSystem.AddWindow(System.KeybindWindow = new KeybindWindow());
 
         ICommandManager.Get().AddHandler("/expandedhotbars", new CommandInfo(OnCommand) {
             AllowedInMacros = true,
@@ -48,7 +62,13 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
 
         ICommandManager.Get().RemoveHandler("/expandedhotbars");
 
+        foreach (var window in System.WindowSystem.Windows) {
+            window.IsOpen = false;
+        }
+
         System.WindowSystem.RemoveAllWindows();
+
+        System.MeidingerMidFont.Dispose();
 
         await System.HotbarController.DisposeAsync();
         await KamiToolKitLibrary.DisposeAsync();

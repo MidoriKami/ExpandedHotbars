@@ -12,6 +12,25 @@ namespace ExpandedHotbars.Extensions;
 /// </summary>
 public static class ImGuiExtensions {
     extension(ImGui) {
+
+        /// <summary>
+        /// Gets total area height. (Not remaining).
+        /// </summary>
+        public static float TotalHeight
+            => ImGui.GetContentRegionMax().X;
+
+        /// <summary>
+        /// Gets total area width. (Not remaining).
+        /// </summary>
+        public static float TotalWidth
+            => ImGui.GetContentRegionMax().X;
+
+        /// <summary>
+        /// Gets total area size. (Not remaining).
+        /// </summary>
+        public static Vector2 TotalArea
+            => ImGui.GetContentRegionMax();
+
         /// <summary>
         /// Gets remaining area height.
         /// </summary>
@@ -63,7 +82,7 @@ public static class ImGuiExtensions {
         }
 
         /// <summary>
-        /// Draws the text colored and cenetered, optionally vertically as well.
+        /// Draws the text colored and centered, optionally vertically as well.
         /// </summary>
         public static void CenteredText(string text, bool vertically = false)
             => ImGui.CenteredText(KnownColor.White.Vector(), text, vertically);
@@ -88,5 +107,23 @@ public static class ImGuiExtensions {
         /// </summary>
         public static Vector2 ScaledVector(float x, float y)
             => ImGuiHelpers.ScaledVector2(x, y);
+
+        /// <summary>
+        /// Helper for getting a scaled constant.
+        /// </summary>
+        public static float Scaled(float value)
+            => ImGuiHelpers.GlobalScale * value;
+
+        /// <summary>
+        /// Helper for getting item spacing.
+        /// </summary>
+        public static Vector2 ItemSpacing
+            => ImGui.GetStyle().ItemSpacing;
+
+        /// <summary>
+        /// Helper for getting frame padding.
+        /// </summary>
+        public static Vector2 FramePadding
+            => ImGui.GetStyle().FramePadding;
     }
 }

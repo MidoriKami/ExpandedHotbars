@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
@@ -11,13 +12,23 @@ namespace ExpandedHotbars.Conditions;
 /// Not intended to represent multiple jobs.
 /// </summary>
 public class ClassJobCondition : ConditionBase {
+    public override string Name
+        => "ClassJob";
 
     public override string Label
-        => "ClassJob";
+        => ClassJob is 0 ?
+               "ClassJob (Job not Selected)" :
+               $"ClassJob ({ISeStringEvaluator.Get().EvaluateFromAddon(698, [ClassJob])})";
 
     public uint ClassJob;
 
-    public override bool IsConditionMet() {
+    public override bool HasConfiguration
+        => true;
+
+    public override Vector2 ConfigSize
+        => new(200.0f, 500.0f);
+
+    protected override bool EvaluateCondition() {
         var currentJob = IPlayerState.Get().ClassJob.RowId;
 
         if (currentJob is 0) return true;
@@ -26,15 +37,15 @@ public class ClassJobCondition : ConditionBase {
     }
 
     public override void DrawConfig() {
-        using var popup = ImRaii.Popup(Label);
-        if (!popup) return;
-
         var classJobs = IDataManager.Get().GetExcelSheet<ClassJob>()
-            .Where(job => job.ClassJobCategory.RowId is not 0)
+            .Where(job => !job.Name.IsEmpty)
             .OrderBy(job => job.UIPriority);
 
         foreach (var option in classJobs) {
-            if (ImGui.Selectable(option.Name.ToString(), ClassJob == option.RowId)) {
+            using var id = ImRaii.PushId(option.RowId.ToString());
+
+            var label = ISeStringEvaluator.Get().EvaluateFromAddon(698, [option.RowId]).ToString();
+            if (ImGui.Selectable(label, ClassJob == option.RowId)) {
                 ClassJob = option.RowId;
             }
         }

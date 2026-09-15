@@ -3,12 +3,16 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.ClientState.Keys;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
+using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
+using ExpandedHotbars.Enums;
 using ExpandedHotbars.Extensions;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace ExpandedHotbars.Windows;
 
@@ -18,12 +22,16 @@ namespace ExpandedHotbars.Windows;
 public class ConfigWindow : Window {
 
     private HotbarConfig? selectedConfig;
+    private ConditionBase? selectedCondition;
+    private ConditionBase? configuringCondition;
 
     public ConfigWindow() : base("Expanded Hotbars Config Window") {
         SizeConstraints = new WindowSizeConstraints {
             MinimumSize = new Vector2(850.0f, 500.0f),
             MaximumSize = new Vector2(850.0f, 500.0f),
         };
+
+        Flags |= ImGuiWindowFlags.NoResize;
     }
 
     public override void Draw() {
@@ -150,6 +158,7 @@ public class ConfigWindow : Window {
         selectedConfig.Size.Y = Math.Clamp(selectedConfig.Size.Y, 1.0f, 50.0f);
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsRebuild;
             System.Config.Save();
         }
 
@@ -158,6 +167,7 @@ public class ConfigWindow : Window {
         ImGui.InputFloat2("##HotbarSpacing", ref selectedConfig.Spacing, 1.0f, 5.0f, "%.0f");
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -166,6 +176,7 @@ public class ConfigWindow : Window {
         ImGui.SliderFloat("##Scale", ref selectedConfig.Scale, 0.5f, 5.0f);
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -180,6 +191,7 @@ public class ConfigWindow : Window {
 
         ImGui.Label("Enable Padlock Button");
         if (ImGui.Checkbox("##EnablePadlock", ref selectedConfig.ShowPadlockButton)) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -205,6 +217,113 @@ public class ConfigWindow : Window {
 
         ImGui.ScaledDummy(5.0f);
 
+        ImGui.Text("Condition Mode");
+        ImGui.SameLine(ImGui.TotalWidth / 3.0f);
+
+        if (ImGui.RadioButton("Show When All", selectedConfig.RequireAllConditions)) {
+            selectedConfig.RequireAllConditions = true;
+            System.Config.Save();
+        }
+
+        ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f);
+
+        if (ImGui.RadioButton("Show When Any", !selectedConfig.RequireAllConditions)) {
+            selectedConfig.RequireAllConditions = false;
+            System.Config.Save();
+        }
+
+        ImGui.ScaledDummy(5.0f);
+        ImGui.Separator();
+
+        if (ImGui.Button("Add Condition", ImGui.ScaledVector(250.0f, 22.0f))) {
+            if (selectedCondition is not null) {
+                if (Activator.CreateInstance(selectedCondition.GetType()) is ConditionBase newCondition) {
+                    selectedConfig.ShowConditions.Add(newCondition);
+                }
+            }
+        }
+
+        ImGui.SameLine();
+
+        ImGui.SetNextItemWidth(ImGui.AreaWidth);
+        using (var dropdown = ImRaii.Combo("##ConditionSelect", selectedCondition?.Name ?? "Select a Condition")) {
+            if (dropdown) {
+                foreach (var option in System.GetConditions().OrderBy(condition => condition.Name)) {
+                    if (ImGui.Selectable(option.Name, selectedCondition == option)) {
+                        selectedCondition = option;
+                    }
+                }
+            }
+        }
+
+        ImGui.ScaledDummy(5.0f);
+
+        if (selectedConfig.ShowConditions.Count is 0) {
+            ImGui.CenteredText(KnownColor.Orange.Vector(), "No Conditions Defined", true);
+        }
+        else {
+            var buttonSize = new Vector2(ImGui.TotalWidth / 6.0f - ImGui.ItemSpacing.X, ImGui.Scaled(22.0f));
+            ConditionBase? removalOption = null;
+
+            using var conditionsChild = ImRaii.Child("ConditionOptions", ImGui.Area);
+            if (conditionsChild) {
+                foreach (var (index, condition) in selectedConfig.ShowConditions.Index()) {
+                    if (ImGui.Button(condition.Invert ? $"Disallowed##{index}" : $"Allowed##{index}", new Vector2(ImGui.TotalWidth / 6.0f, ImGui.Scaled(22.0f)))) {
+                        condition.Invert = !condition.Invert;
+                        System.Config.Save();
+                    }
+
+                    ImGui.SameLine(ImGui.TotalWidth / 6.0f + ImGui.ItemSpacing.X);
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.Text(condition.Label);
+
+                    ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f + ImGui.ItemSpacing.X);
+                    using (ImRaii.Disabled(!condition.HasConfiguration)) {
+                        if (ImGui.Button($"Configure##{index}", buttonSize)) {
+                            ImGui.OpenPopup("ConditionConfigPopup");
+                            configuringCondition = condition;
+                        }
+                    }
+                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && !condition.HasConfiguration) {
+                        ImGui.SetTooltip("This option is not configurable.");
+                    }
+
+                    ImGui.SameLine(ImGui.TotalWidth * 5.0f / 6.0f + ImGui.ItemSpacing.X);
+
+                    using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
+                        if (ImGui.Button($"Delete##{index}", buttonSize)) {
+                            removalOption = condition;
+                        }
+                    }
+
+                    if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled) && !IKeyState.Get().DeleteKeybindPressed) {
+                        ImGui.SetTooltip("Hold Control + Shift to enable button.");
+                    }
+
+                    ImGui.ScaledDummy(0.0f);
+                }
+
+                if (removalOption is { } option) {
+                    selectedConfig.ShowConditions.Remove(option);
+                }
+            }
+
+            DrawConditionConfigPopup();
+        }
+    }
+
+    private void DrawConditionConfigPopup() {
+        if (configuringCondition is null) return;
+
+        ImGui.SetNextWindowSize(configuringCondition.ConfigSize);
+
+        using var popup = ImRaii.Popup("ConditionConfigPopup");
+        if (!popup) {
+            configuringCondition = null;
+            return;
+        }
+
+        configuringCondition.DrawConfig();
     }
 
     private void DrawKeybindsTab() {
@@ -215,6 +334,60 @@ public class ConfigWindow : Window {
 
         ImGui.ScaledDummy(5.0f);
 
+        foreach (var row in Enumerable.Range(0, (int) selectedConfig.Size.Y)) {
+            foreach (var column in Enumerable.Range(0, (int) selectedConfig.Size.X)) {
+                using var id = ImRaii.PushId($"{row},{column}");
 
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text($"Row {row + 1} Column {column + 1}");
+                ImGui.SameLine(ImGui.Scaled(150.0f));
+
+                selectedConfig.Keybinds.TryGetValue((row, column), out var keybindInfo);
+
+                using (System.MeidingerMidFont.Push()) {
+                    if (ImGui.Button(keybindInfo?.ToString() ?? "", ImGui.ScaledVector(100.0f, 24.0f))) {
+                        System.KeybindWindow.KeybindConfirmed = keyCombo => {
+                            if (keybindInfo is null) {
+                                selectedConfig.Keybinds.TryAdd((row, column), keyCombo);
+                            }
+                            else {
+                                keybindInfo.Key = keyCombo.Key;
+                                keybindInfo.Modifier = keyCombo.Modifier;
+                            }
+
+                            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
+                            System.Config.Save();
+                        };
+
+                        System.KeybindWindow.KeybindCleared = () => {
+                            keybindInfo?.Key = VirtualKey.NO_KEY;
+                            keybindInfo?.Modifier = VirtualKey.NO_KEY;
+
+                            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
+                            System.Config.Save();
+                        };
+
+                        System.KeybindWindow.IsOpen = true;
+                    }
+                }
+
+                var iconId = 0U;
+                var actionName = string.Empty;
+
+                if (selectedConfig.Actions.TryGetValue((row, column), out var actionInfo)) {
+                    var actionData = IDataManager.Get().GetExcelSheet<Action>().GetRow(actionInfo.ActionId);
+
+                    iconId = actionData.Icon;
+                    actionName = actionData.Name.ToString();
+                }
+
+                ImGui.SameLine(ImGui.Scaled(275.0f));
+                ImGui.Image(ITextureProvider.Get().GetFromGameIcon(iconId).GetWrapOrEmpty().Handle, new Vector2(24.0f, 24.0f));
+
+                ImGui.SameLine(ImGui.Scaled(325.0f));
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text(actionName);
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ public class HotbarConfig {
     /// <summary>
     /// Spacing between slots. Default value tries to be close to vanilla.
     /// </summary>
-    public Vector2 Spacing = new Vector2(0.0f, 4.0f);
+    public Vector2 Spacing = new(0.0f, 4.0f);
 
     /// <summary>
     /// The current position of the hotbar, ideally this is spawned in the middle of the screen,
@@ -52,6 +52,21 @@ public class HotbarConfig {
     /// </summary>
     public List<ConditionBase> ShowConditions = [];
 
+    /// <summary>
+    /// When true, all conditions in ShowConditions must be met, when false, only one must be met to show.
+    /// </summary>
+    public bool RequireAllConditions = true;
+
+    /// <summary>
+    /// Dictionary of actions this hotbar holds.
+    /// </summary>
+    public Dictionary<HotbarLocation, ActionInfo> Actions = [];
+
+    /// <summary>
+    /// Dictionary of keybinds this hotbar hold.
+    /// </summary>
+    public Dictionary<HotbarLocation, KeybindInfo> Keybinds = [];
+
     //
     // Non Serialized Properties used during configuration
     //
@@ -59,10 +74,26 @@ public class HotbarConfig {
     /// <summary>
     /// Flags that indicate what part of the native hotbar to update on a config change.
     /// </summary>
-    [JsonIgnore] public ConfigChangedKind UpdateFlags = ConfigChangedKind.None;
+    [JsonIgnore] public ConfigChangedKind UpdateFlags = ConfigChangedKind.NeedsRebuild | ConfigChangedKind.NeedsUpdate;
 
     /// <summary>
     /// Indicates if the hotbar should be set to moveable.
     /// </summary>
     [JsonIgnore] public bool IsMovingEnabled = false;
+
+    //
+    // Helper Functions
+    //
+
+    /// <summary>
+    /// Returns true if conditions are met according to configuration.
+    /// </summary>
+    public bool ShouldShowHotbar() {
+        if (RequireAllConditions) {
+            return ShowConditions.TrueForAll(entry => entry.IsConditionMet());
+        }
+        else {
+            return ShowConditions.Exists(entry => entry.IsConditionMet());
+        }
+    }
 }
