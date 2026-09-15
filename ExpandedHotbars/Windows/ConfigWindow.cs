@@ -3,12 +3,15 @@ using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.ClientState.Keys;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ExpandedHotbars.Configuration;
+using ExpandedHotbars.Enums;
 using ExpandedHotbars.Extensions;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace ExpandedHotbars.Windows;
 
@@ -24,6 +27,8 @@ public class ConfigWindow : Window {
             MinimumSize = new Vector2(850.0f, 500.0f),
             MaximumSize = new Vector2(850.0f, 500.0f),
         };
+
+        Flags |= ImGuiWindowFlags.NoResize;
     }
 
     public override void Draw() {
@@ -150,6 +155,7 @@ public class ConfigWindow : Window {
         selectedConfig.Size.Y = Math.Clamp(selectedConfig.Size.Y, 1.0f, 50.0f);
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsRebuild;
             System.Config.Save();
         }
 
@@ -158,6 +164,7 @@ public class ConfigWindow : Window {
         ImGui.InputFloat2("##HotbarSpacing", ref selectedConfig.Spacing, 1.0f, 5.0f, "%.0f");
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -166,6 +173,7 @@ public class ConfigWindow : Window {
         ImGui.SliderFloat("##Scale", ref selectedConfig.Scale, 0.5f, 5.0f);
 
         if (ImGui.IsItemDeactivatedAfterEdit()) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -180,6 +188,7 @@ public class ConfigWindow : Window {
 
         ImGui.Label("Enable Padlock Button");
         if (ImGui.Checkbox("##EnablePadlock", ref selectedConfig.ShowPadlockButton)) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
             System.Config.Save();
         }
 
@@ -215,6 +224,61 @@ public class ConfigWindow : Window {
 
         ImGui.ScaledDummy(5.0f);
 
+        foreach (var row in Enumerable.Range(0, (int) selectedConfig.Size.Y)) {
+            foreach (var column in Enumerable.Range(0, (int) selectedConfig.Size.X)) {
+                using var id = ImRaii.PushId($"{row},{column}");
 
+                var iconId = 0U;
+                var actionName = string.Empty;
+
+                if (selectedConfig.Actions.TryGetValue((row, column), out var actionInfo)) {
+                    var actionData = IDataManager.Get().GetExcelSheet<Action>().GetRow(actionInfo.ActionId);
+
+                    iconId = actionData.Icon;
+                    actionName = actionData.Name.ToString();
+                }
+
+                ImGui.Image(ITextureProvider.Get().GetFromGameIcon(iconId).GetWrapOrEmpty().Handle, new Vector2(24.0f, 24.0f));
+
+                ImGui.SameLine(ImGui.Scaled(50.0f));
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text(actionName);
+
+                ImGui.SameLine(ImGui.Scaled(200.0f));
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text($"Row {row + 1} Column {column + 1}");
+
+                selectedConfig.Keybinds.TryGetValue((row, column), out var keybindInfo);
+
+                ImGui.SameLine(ImGui.Scaled(350.0f));
+
+                using var font = System.MeidingerMidFont.Push();
+
+                if (ImGui.Button(keybindInfo?.ToString() ?? "", new Vector2(ImGui.AreaWidth, 24.0f))) {
+                    System.KeybindWindow.KeybindConfirmed = keyCombo => {
+                        if (keybindInfo is null) {
+                            selectedConfig.Keybinds.TryAdd((row, column), keyCombo);
+                        }
+                        else {
+                            keybindInfo.Key = keyCombo.Key;
+                            keybindInfo.Modifier = keyCombo.Modifier;
+                        }
+
+                        selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
+                        System.Config.Save();
+                    };
+
+                    System.KeybindWindow.KeybindCleared = () => {
+                        keybindInfo?.Key = VirtualKey.NO_KEY;
+                        keybindInfo?.Modifier = VirtualKey.NO_KEY;
+
+                        selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
+                        System.Config.Save();
+                    };
+
+                    System.KeybindWindow.IsOpen = true;
+                }
+            }
+        }
     }
 }

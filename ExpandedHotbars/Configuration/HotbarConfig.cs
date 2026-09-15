@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Text.Json.Serialization;
+using ExpandedHotbars.Classes;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Enums;
 
@@ -29,7 +30,7 @@ public class HotbarConfig {
     /// <summary>
     /// Spacing between slots. Default value tries to be close to vanilla.
     /// </summary>
-    public Vector2 Spacing = new Vector2(0.0f, 4.0f);
+    public Vector2 Spacing = new(0.0f, 4.0f);
 
     /// <summary>
     /// The current position of the hotbar, ideally this is spawned in the middle of the screen,
@@ -52,6 +53,16 @@ public class HotbarConfig {
     /// </summary>
     public List<ConditionBase> ShowConditions = [];
 
+    /// <summary>
+    /// Dictionary of actions this hotbar holds.
+    /// </summary>
+    public Dictionary<HotbarLocation, ActionInfo> Actions = [];
+
+    /// <summary>
+    /// Dictionary of keybinds this hotbar hold.
+    /// </summary>
+    public Dictionary<HotbarLocation, KeybindInfo> Keybinds = [];
+
     //
     // Non Serialized Properties used during configuration
     //
@@ -59,7 +70,7 @@ public class HotbarConfig {
     /// <summary>
     /// Flags that indicate what part of the native hotbar to update on a config change.
     /// </summary>
-    [JsonIgnore] public ConfigChangedKind UpdateFlags = ConfigChangedKind.None;
+    [JsonIgnore] public ConfigChangedKind UpdateFlags = ConfigChangedKind.NeedsRebuild | ConfigChangedKind.NeedsUpdate;
 
     /// <summary>
     /// Indicates if the hotbar should be set to moveable.
