@@ -3,13 +3,13 @@ using Dalamud.Plugin.Services;
 
 namespace ExpandedHotbars.Conditions;
 
-public class GameEventCondition : ConditionBase {
+public class CutsceneCondition : ConditionBase {
     public override string Name
-        => "Game Event";
+        => "Cutscene";
 
     public override string Label
-        => "Game Event";
+        => "Cutscene";
 
     protected override bool EvaluateCondition()
-        => ICondition.Get().Any(ConditionFlag.OccupiedInQuestEvent, ConditionFlag.OccupiedInEvent);
+        => ICondition.Get().Any(ConditionFlag.OccupiedInCutSceneEvent);
 }

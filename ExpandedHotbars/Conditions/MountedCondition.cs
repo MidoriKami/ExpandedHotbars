@@ -3,13 +3,13 @@ using Dalamud.Plugin.Services;
 
 namespace ExpandedHotbars.Conditions;
 
-public class GameEventCondition : ConditionBase {
+public class MountedCondition : ConditionBase {
     public override string Name
-        => "Game Event";
+        => "Mounted";
 
     public override string Label
-        => "Game Event";
+        => "Mounted";
 
     protected override bool EvaluateCondition()
-        => ICondition.Get().Any(ConditionFlag.OccupiedInQuestEvent, ConditionFlag.OccupiedInEvent);
+        => ICondition.Get().Any(ConditionFlag.Mounted);
 }

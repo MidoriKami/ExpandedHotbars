@@ -47,6 +47,7 @@ public class ClassJobCondition : ConditionBase {
             var label = ISeStringEvaluator.Get().EvaluateFromAddon(698, [option.RowId]).ToString();
             if (ImGui.Selectable(label, ClassJob == option.RowId)) {
                 ClassJob = option.RowId;
+                System.Config.Save();
             }
         }
     }

@@ -239,6 +239,7 @@ public class ConfigWindow : Window {
             if (selectedCondition is not null) {
                 if (Activator.CreateInstance(selectedCondition.GetType()) is ConditionBase newCondition) {
                     selectedConfig.ShowConditions.Add(newCondition);
+                    System.Config.Save();
                 }
             }
         }
@@ -246,7 +247,7 @@ public class ConfigWindow : Window {
         ImGui.SameLine();
 
         ImGui.SetNextItemWidth(ImGui.AreaWidth);
-        using (var dropdown = ImRaii.Combo("##ConditionSelect", selectedCondition?.Name ?? "Select a Condition")) {
+        using (var dropdown = ImRaii.Combo("##ConditionSelect", selectedCondition?.Name ?? "Select a Condition", ImGuiComboFlags.HeightLarge)) {
             if (dropdown) {
                 foreach (var option in System.GetConditions().OrderBy(condition => condition.Name)) {
                     if (ImGui.Selectable(option.Name, selectedCondition == option)) {
