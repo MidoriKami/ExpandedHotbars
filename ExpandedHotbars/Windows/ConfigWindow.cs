@@ -93,7 +93,9 @@ public class ConfigWindow : Window {
         if (!buttonArea) return;
 
         if (ImGui.Button("Add", ImGui.Area)) {
-            System.Config.Hotbars.Add(new HotbarConfig());
+            var newConfig = new HotbarConfig();
+            System.Config.Hotbars.Add(newConfig);
+            System.HotbarController.AddHotbar(newConfig);
             System.Config.Save();
         }
     }
@@ -199,6 +201,7 @@ public class ConfigWindow : Window {
         using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
             if (ImGui.Button("Delete")) {
                 System.Config.Hotbars.Remove(selectedConfig);
+                System.HotbarController.RemoveHotbar(selectedConfig);
                 selectedConfig = null;
                 System.Config.Save();
             }
