@@ -12,7 +12,6 @@ using Dalamud.Plugin.Services;
 using ExpandedHotbars.Classes;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
-using ExpandedHotbars.Extensions;
 using ExpandedHotbars.Windows;
 using KamiToolKit;
 
@@ -48,6 +47,12 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
             HelpMessage = "Show/Hide/Toggle hotbars or the config window",
         });
 
+        ICommandManager.Get().AddHandler("/exhotbar", new CommandInfo(OnCommand) {
+            AllowedInMacros = true,
+            ShowInHelp = true,
+            HelpMessage = "Show/Hide/Toggle hotbars or the config window",
+        });
+
         PluginInterface.UiBuilder.Draw += System.WindowSystem.Draw;
         PluginInterface.UiBuilder.OpenMainUi += System.ConfigWindow.Toggle;
         PluginInterface.UiBuilder.OpenConfigUi += System.ConfigWindow.Toggle;
@@ -59,6 +64,7 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
         PluginInterface.UiBuilder.Draw -= System.WindowSystem.Draw;
 
         ICommandManager.Get().RemoveHandler("/expandedhotbars");
+        ICommandManager.Get().RemoveHandler("/exhotbar");
 
         foreach (var window in System.WindowSystem.Windows) {
             window.IsOpen = false;
@@ -73,7 +79,7 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
     }
 
     private static void OnCommand(string command, string arguments) {
-        if (command is not "/expandedhotbars") return;
+        if (command is not ("/expandedhotbars" or "/exhotbar")) return;
 
         switch (arguments.Split(' ', 2)) {
             case null or [] or [ "" ] or [ "", "" ]:
