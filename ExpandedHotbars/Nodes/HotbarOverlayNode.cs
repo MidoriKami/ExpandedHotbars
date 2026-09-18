@@ -93,6 +93,9 @@ public sealed class HotbarOverlayNode : OverlayNode {
                 if (Config.Actions.TryGetValue((row, column), out var actionInfo)) {
                     newHotbarNode.SetSlot(actionInfo.DragDropType, actionInfo.ActionId);
                 }
+                else {
+                    newHotbarNode.SetSlot(DragDropType.Nothing, 0);
+                }
 
                 if (Config.Keybinds.TryGetValue((row, column), out var keybindInfo)) {
                     newHotbarNode.KeyBind = keybindInfo;
