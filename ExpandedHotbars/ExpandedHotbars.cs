@@ -51,8 +51,6 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
         PluginInterface.UiBuilder.Draw += System.WindowSystem.Draw;
         PluginInterface.UiBuilder.OpenMainUi += System.ConfigWindow.Toggle;
         PluginInterface.UiBuilder.OpenConfigUi += System.ConfigWindow.Toggle;
-
-        System.ConfigWindow.DebugToggle();
     }
 
     public async ValueTask DisposeAsync() {
