@@ -19,6 +19,7 @@ public class RoleCondition : ConditionBase {
 
     protected override bool EvaluateCondition() {
         if (Role is 0) return false;
+        if (!IClientState.Get().IsLoggedIn) return false;
 
         return IPlayerState.Get().ClassJob.Value.JobType == (uint)Role;
     }

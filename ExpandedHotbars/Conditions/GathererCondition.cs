@@ -9,6 +9,9 @@ public class GathererCondition : ConditionBase {
     public override string Label
         => "Gatherer";
 
-    protected override bool EvaluateCondition()
-        => IPlayerState.Get().ClassJob.Value.ClassJobCategory.RowId is 33;
+    protected override bool EvaluateCondition() {
+        if (!IClientState.Get().IsLoggedIn) return false;
+
+        return IPlayerState.Get().ClassJob.Value.ClassJobCategory.RowId is 33;
+    }
 }

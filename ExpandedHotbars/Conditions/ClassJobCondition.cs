@@ -29,6 +29,8 @@ public class ClassJobCondition : ConditionBase {
         => new(200.0f, 500.0f);
 
     protected override bool EvaluateCondition() {
+        if (!IClientState.Get().IsLoggedIn) return false;
+
         var currentJob = IPlayerState.Get().ClassJob.RowId;
 
         if (currentJob is 0) return true;
