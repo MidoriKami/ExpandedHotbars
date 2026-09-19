@@ -12,6 +12,9 @@ using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
 using ExpandedHotbars.Enums;
 using ExpandedHotbars.Extensions;
+using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+using FFXIVClientStructs.FFXIV.Component.GUI;
+using Lumina.Excel.Sheets;
 using Action = Lumina.Excel.Sheets.Action;
 
 namespace ExpandedHotbars.Windows;
@@ -379,10 +382,7 @@ public class ConfigWindow : Window {
                 var actionName = string.Empty;
 
                 if (selectedConfig.Actions.TryGetValue((row, column), out var actionInfo)) {
-                    var actionData = IDataManager.Get().GetExcelSheet<Action>().GetRow(actionInfo.ActionId);
-
-                    iconId = actionData.Icon;
-                    actionName = actionData.Name.ToString();
+                    (iconId, actionName) = GetDrawInfo(actionInfo);
                 }
 
                 ImGui.SameLine(ImGui.Scaled(275.0f));
@@ -392,6 +392,30 @@ public class ConfigWindow : Window {
                 ImGui.AlignTextToFramePadding();
                 ImGui.Text(actionName);
             }
+        }
+    }
+
+    private static unsafe (uint icon, string name) GetDrawInfo(ActionInfo info) {
+        switch (info.DragDropType) {
+            case DragDropType.Action:
+                var actionData = IDataManager.Get().GetExcelSheet<Action>().GetRow(info.ActionId);
+                return (actionData.Icon, actionData.Name.ToString());
+
+            case DragDropType.GeneralAction:
+                var generalActionData = IDataManager.Get().GetExcelSheet<GeneralAction>().GetRow(info.ActionId);
+                return ((uint)generalActionData.Icon, generalActionData.Name.ToString());
+
+            case DragDropType.Macro:
+                var macroData = RaptureMacroModule.Instance()->GetMacro(info.ActionId / 0x100, info.ActionId % 0x100);
+                return (macroData->IconId, macroData->Name.ToString());
+
+            default:
+                if (info.ActionId is not (0 or uint.MaxValue)) {
+                    return (60861, $"Unable to Parse Type '{info.DragDropType}'");
+                }
+                else {
+                    return (0U, string.Empty);
+                }
         }
     }
 }
