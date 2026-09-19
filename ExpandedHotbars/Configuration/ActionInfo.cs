@@ -3,7 +3,7 @@
 namespace ExpandedHotbars.Configuration;
 
 /// <summary>
-/// Data object represneting a hotbar action and its locations
+/// Data object representing a hotbar action and its locations
 /// </summary>
 public class ActionInfo {
     /// <summary>
