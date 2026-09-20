@@ -2,6 +2,7 @@
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 
@@ -96,9 +97,16 @@ public static class ImGuiExtensions {
         /// <summary>
         /// Draws a label for an element, centering the text to frame padding, and same-lining.
         /// </summary>
-        public static void Label(string text) {
+        public static void Label(string text, string tooltip = "") {
             ImGui.AlignTextToFramePadding();
             ImGui.Text(text);
+
+            if (tooltip is not "") {
+                ImGui.SameLine();
+                ImGui.ScaledDummy(8.0f);
+                ImGuiComponents.HelpMarker(tooltip);
+            }
+
             ImGui.SameLine(ImGui.AreaWidth / 3.0f);
         }
 
