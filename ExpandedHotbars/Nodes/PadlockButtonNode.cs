@@ -13,6 +13,7 @@ public class PadlockButtonNode : TextureButtonNode {
         TextureSize = new Vector2(20.0f, 24.0f);
 
         ImageNode.Scale = new Vector2(0.90f, 0.90f);
+        ImageNode.NodeId = 2;
     }
 
     protected override void OnSizeChanged() {

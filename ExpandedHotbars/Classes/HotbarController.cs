@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
-using System.Threading;
 using System.Threading.Tasks;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
@@ -43,6 +42,7 @@ public sealed class HotbarController : IAsyncDisposable {
         }
 
         var newHotbarNode = new HotbarOverlayNode {
+            NodeId = hotbarConfig.GetNameHash(),
             Position = position,
             Config = hotbarConfig,
         };

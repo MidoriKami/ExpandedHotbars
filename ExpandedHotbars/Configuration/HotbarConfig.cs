@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Numerics;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json.Serialization;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Enums;
@@ -100,5 +103,16 @@ public class HotbarConfig {
         else {
             return ShowConditions.Exists(entry => entry.IsConditionMet());
         }
+    }
+
+    /// <summary>
+    /// Hashes the hotbar name to generate a hopefully unique node ID.
+    /// This will allow HUDUnlimited to edit the hotbar.
+    /// </summary>
+    public uint GetNameHash() {
+        var inputBytes = Encoding.UTF8.GetBytes(HotbarName);
+        var hashBytes = SHA256.HashData(inputBytes);
+
+        return BitConverter.ToUInt32(hashBytes, 0) % 1_000_000;
     }
 }

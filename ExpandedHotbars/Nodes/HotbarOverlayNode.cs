@@ -57,6 +57,7 @@ public sealed class HotbarOverlayNode : OverlayNode {
 
     public unsafe HotbarOverlayNode() {
         padlockNode = new PadlockButtonNode {
+            NodeId = 1,
             Size = new Vector2(20.0f, 24.0f),
             TextTooltip = "Left Click to lock/unlock hotbar slots.\n" +
                           "Right Click to enable moving hotbar.\n" +
@@ -78,6 +79,7 @@ public sealed class HotbarOverlayNode : OverlayNode {
         foreach (var row in Enumerable.Range(0, (int) Config.Size.Y)) {
             foreach (var column in Enumerable.Range(0, (int) Config.Size.X)) {
                 var newHotbarNode = new HotbarNode {
+                    NodeId = (uint) (column + row * Config.Size.X) + 2,
                     Position = new Vector2(8.0f, 8.0f) +
                                new Vector2(44.0f * column, 44.0f * row) +
                                new Vector2(Config.Spacing.X * column, Config.Spacing.Y * row),
