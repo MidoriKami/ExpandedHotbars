@@ -200,6 +200,12 @@ public class ConfigWindow : Window {
             System.Config.Save();
         }
 
+        ImGui.Label("Allow Clicking Actions", "When checked allows invoking actions via mouse clicks.");
+        if (ImGui.Checkbox("##EnableClicking", ref selectedConfig.EnableClicking)) {
+            selectedConfig.UpdateFlags |= ConfigChangedKind.NeedsUpdate;
+            System.Config.Save();
+        }
+
         ImGui.Label("Delete Hotbar");
         using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
             if (ImGui.Button("Delete")) {

@@ -67,6 +67,11 @@ public class HotbarConfig {
     /// </summary>
     public Dictionary<HotbarLocation, KeybindInfo> Keybinds = [];
 
+    /// <summary>
+    /// Allows disabling of mouse clicks to trigger actions.
+    /// </summary>
+    public bool EnableClicking = true;
+
     //
     // Non Serialized Properties used during configuration
     //
