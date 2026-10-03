@@ -93,7 +93,14 @@ public sealed class HotbarOverlayNode : OverlayNode {
                 newHotbarNode.OnDiscard += _ => OnPayloadDiscard(row, column);
 
                 if (Config.Actions.TryGetValue((row, column), out var actionInfo)) {
-                    newHotbarNode.SetSlot(actionInfo.DragDropType, actionInfo.ActionId);
+                    var payload = new DragDropPayload {
+                        Int1 = actionInfo.ContainerId,
+                        Int2 = (int)actionInfo.ActionId,
+                        ReferenceIndex = actionInfo.ReferenceId,
+                        Type = actionInfo.DragDropType,
+                    };
+
+                    newHotbarNode.SetSlot(payload);
                 }
                 else {
                     newHotbarNode.SetSlot(DragDropType.Nothing, 0);
@@ -146,6 +153,8 @@ public sealed class HotbarOverlayNode : OverlayNode {
         Config.Actions[(row, column)] = new ActionInfo {
             DragDropType = payload.Type,
             ActionId = (uint) payload.Int2,
+            ContainerId = payload.Int1,
+            ReferenceId = payload.ReferenceIndex,
         };
 
         System.Config.Save();
