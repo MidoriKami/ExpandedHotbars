@@ -103,7 +103,7 @@ public sealed class HotbarOverlayNode : OverlayNode {
                     newHotbarNode.SetSlot(payload);
                 }
                 else {
-                    newHotbarNode.SetSlot(DragDropType.Nothing, 0);
+                    newHotbarNode.ClearSlot();
                 }
 
                 if (Config.Keybinds.TryGetValue((row, column), out var keybindInfo)) {
