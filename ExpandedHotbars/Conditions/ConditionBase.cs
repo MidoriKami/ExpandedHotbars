@@ -48,7 +48,7 @@ public abstract partial class ConditionBase {
     /// Gets the size that should be used for the config popup.
     /// </summary>
     public virtual Vector2 ConfigSize { get; }
-        = new Vector2(400.0f, 400.0f);
+        = new(400.0f, 400.0f);
 
     /// <summary>
     /// Value indicating if this condition is valid.
