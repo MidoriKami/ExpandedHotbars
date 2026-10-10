@@ -24,6 +24,12 @@ public sealed class HotbarOverlayNode : OverlayNode {
         IsVisible = Config.ShouldShowHotbar() && Config.IsEnabled && !IClientState.Get().IsPvP;
         if (!IsVisible) return;
 
+        foreach (var feature in Config.ExtraFeatures) {
+            if (feature is { IsValid: true, Enabled: true }) {
+                feature.Update();
+            }
+        }
+
         Scale = new Vector2(Config.Scale, Config.Scale);
 
         if (Config.UpdateFlags.HasFlag(ConfigChangedKind.NeedsRebuild)) {

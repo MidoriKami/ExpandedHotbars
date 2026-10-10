@@ -58,6 +58,15 @@ public partial class ConfigWindow {
 
         ImGui.Label("Enabled");
         if (ImGui.Checkbox("##Enabled", ref selectedConfig.IsEnabled)) {
+            foreach (var feature in selectedConfig.ExtraFeatures) {
+                if (selectedConfig.IsEnabled) {
+                    feature.OnEnable();
+                }
+                else {
+                    feature.OnDisable();
+                }
+            }
+
             System.Config.Save();
         }
 

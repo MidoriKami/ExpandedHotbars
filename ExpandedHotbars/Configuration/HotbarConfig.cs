@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Enums;
+using ExpandedHotbars.Extras;
 
 namespace ExpandedHotbars.Configuration;
 
@@ -54,6 +55,11 @@ public class HotbarConfig {
     /// List of conditions that must be met to enable showing this hotbar.
     /// </summary>
     public List<ConditionBase> ShowConditions = [];
+
+    /// <summary>
+    /// List of extra features that do a thing if enabled.
+    /// </summary>
+    public List<ExtrasBase> ExtraFeatures = [];
 
     /// <summary>
     /// When true, all conditions in ShowConditions must be met, when false, only one must be met to show.

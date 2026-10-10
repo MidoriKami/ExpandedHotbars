@@ -12,6 +12,7 @@ using Dalamud.Plugin.Services;
 using ExpandedHotbars.Classes;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
+using ExpandedHotbars.Extras;
 using ExpandedHotbars.Windows;
 using KamiToolKit;
 
@@ -27,6 +28,13 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
             .. Assembly.GetExecutingAssembly()
                 .GetTypes()
                 .Where(type => type.IsSubclassOf(typeof(ConditionBase)))
+                .Where(type => !type.IsAbstract),
+        ];
+
+        System.ExtrasTypes = [
+            .. Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => type.IsSubclassOf(typeof(ExtrasBase)))
                 .Where(type => !type.IsAbstract),
         ];
 

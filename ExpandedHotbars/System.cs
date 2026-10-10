@@ -6,6 +6,7 @@ using Dalamud.Interface.Windowing;
 using ExpandedHotbars.Classes;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
+using ExpandedHotbars.Extras;
 using ExpandedHotbars.Windows;
 
 namespace ExpandedHotbars;
@@ -19,6 +20,7 @@ public static class System {
     public static IFontHandle MeidingerMidFont { get; set; } = null!;
 
     internal static List<Type> ConditionTypes = null!;
+    internal static List<Type> ExtrasTypes = null!;
 
     internal static List<ConditionBase> GetConditions() => [
         .. ConditionTypes
@@ -26,5 +28,13 @@ public static class System {
             .OfType<ConditionBase>()
             .Where(rule => rule.IsValid)
             .OrderBy(rule => rule.Label),
+    ];
+
+    internal static List<ExtrasBase> GetExtras() => [
+        .. ExtrasTypes
+            .Select(type => (ExtrasBase?)Activator.CreateInstance(type))
+            .OfType<ExtrasBase>()
+            .Where(rule => rule.IsValid)
+            .OrderBy(rule => rule.Name),
     ];
 }

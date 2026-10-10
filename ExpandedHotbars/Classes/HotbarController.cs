@@ -23,11 +23,23 @@ public sealed class HotbarController : IAsyncDisposable {
 
         foreach (var hotbarConfig in System.Config.Hotbars) {
             AddHotbar(hotbarConfig);
+
+            foreach (var feature in hotbarConfig.ExtraFeatures) {
+                feature.OnEnable();
+            }
         }
     }
 
     public async ValueTask DisposeAsync() {
-        await IFramework.Get().Run(overlayController.Dispose);
+        await IFramework.Get().Run(() => {
+            foreach (var config in hotbarNodes.Keys) {
+                foreach (var feature in config.ExtraFeatures) {
+                    feature.OnDisable();
+                }
+            }
+
+            overlayController.Dispose();
+        });
     }
 
     public unsafe void AddHotbar(HotbarConfig hotbarConfig) {
