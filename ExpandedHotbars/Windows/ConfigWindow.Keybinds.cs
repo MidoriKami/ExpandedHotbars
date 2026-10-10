@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using ExpandedHotbars.Configuration;
 using ExpandedHotbars.Enums;
 using ExpandedHotbars.Extensions;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using Lumina.Excel.Sheets;
@@ -89,6 +90,13 @@ public partial class ConfigWindow {
             case DragDropType.Macro:
                 var macroData = RaptureMacroModule.Instance()->GetMacro(info.ActionId / 0x100, info.ActionId % 0x100);
                 return (macroData->IconId, macroData->Name.ToString());
+
+            case DragDropType.Item:
+                var sorterEntry = ItemOrderModule.Instance()->InventorySorter->Items[info.ReferenceId].Value;
+                var item = InventoryManager.Instance()->GetInventorySlot((InventoryType) sorterEntry->Page, sorterEntry->Slot);
+                var iconId = item->IconId;
+                var itemName = item->Name;
+                return (iconId, itemName.ToString());
 
             default:
                 if (info.ActionId is not (0 or uint.MaxValue)) {
