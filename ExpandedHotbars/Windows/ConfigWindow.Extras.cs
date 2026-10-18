@@ -24,7 +24,7 @@ public partial class ConfigWindow {
         ImGui.ScaledDummy(5.0f);
 
         ImGui.Text("When this hotbar is active perform the following action(s)");
-        ImGui.ScaledDummy(5.0f);
+        ImGui.ScaledDummy(11.5f);
 
         ImGui.Separator();
 

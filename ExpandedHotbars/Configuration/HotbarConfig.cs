@@ -16,6 +16,11 @@ namespace ExpandedHotbars.Configuration;
 public class HotbarConfig {
 
     /// <summary>
+    /// Unique identifier for this config.
+    /// </summary>
+    public Guid Guid = Guid.NewGuid();
+
+    /// <summary>
     /// Name of this hotbar, names don't have to be unique, but commands may fail if they aren't unique.
     /// </summary>
     public string HotbarName = "New Hotbar";

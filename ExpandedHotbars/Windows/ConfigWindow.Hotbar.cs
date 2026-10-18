@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
 using ExpandedHotbars.Enums;
@@ -26,6 +28,10 @@ public partial class ConfigWindow {
         if (ImGui.IsItemDeactivatedAfterEdit()) {
             System.Config.Save();
         }
+
+        ImGui.Label("Hotbar GUID", "A unique value associated with this hotbar\nPrevents accidentally importing multiple copies of the same hotbar");
+        ImGui.SetNextItemWidth(ImGui.AreaWidth);
+        ImGui.TextColored(KnownColor.Gray.Vector(), selectedConfig.Guid.ToString().ToUpperInvariant());
 
         ImGui.Label("Hotbar Size");
         ImGui.SetNextItemWidth(ImGui.AreaWidth);

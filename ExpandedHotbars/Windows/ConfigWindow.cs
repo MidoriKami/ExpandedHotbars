@@ -5,6 +5,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
+using ExpandedHotbars.Classes;
 using ExpandedHotbars.Conditions;
 using ExpandedHotbars.Configuration;
 using ExpandedHotbars.Extensions;
@@ -58,7 +59,7 @@ public partial class ConfigWindow : Window {
     /// Draws the structural area for the list box contents, does not include add button.
     /// </summary>
     private void DrawSelectionListArea() {
-        using var listArea = ImRaii.Child("ListArea", ImGui.RatioArea(1.0f, 0.95f));
+        using var listArea = ImRaii.Child("ListArea", ImGui.RatioArea(1.0f, 0.94f));
         if (!listArea) return;
 
         DrawHotbarListBox();
@@ -83,15 +84,45 @@ public partial class ConfigWindow : Window {
     /// <summary>
     /// Draw buttons for selection list area.
     /// </summary>
-    private static void DrawSelectionListButtons() {
+    private void DrawSelectionListButtons() {
         using var buttonArea = ImRaii.Child("ButtonArea", ImGui.Area);
         if (!buttonArea) return;
 
-        if (ImGui.Button("Add", ImGui.Area)) {
+        if (ImGui.Button("Add", ImGui.RatioArea(2.0f / 3.0f, 1.0f))) {
             var newConfig = new HotbarConfig();
             System.Config.Hotbars.Add(newConfig);
             System.HotbarController.AddHotbar(newConfig);
             System.Config.Save();
+
+            selectedConfig = newConfig;
+        }
+
+        ImGui.SameLine();
+
+        using (ExpandedHotbars.PluginInterface.UiBuilder.IconFontFixedWidthHandle.Push()) {
+            if (ImGui.Button(FontAwesomeIcon.FileImport.ToIconString(), ImGui.RatioArea(0.5f, 1.0f))) {
+                var result = PresetManager.LoadFromClipboard();
+                if (result is not null) {
+                    selectedConfig = result;
+                }
+            }
+        }
+
+        if (ImGui.IsItemHovered()) {
+            ImGui.SetTooltip("Import new Hotbar Configuration from clipboard");
+        }
+
+        ImGui.SameLine();
+
+        using (ImRaii.Disabled(selectedConfig is null))
+        using (ExpandedHotbars.PluginInterface.UiBuilder.IconFontFixedWidthHandle.Push()) {
+            if (ImGui.Button(FontAwesomeIcon.FileExport.ToIconString(), ImGui.RatioArea(1.0f, 1.0f))) {
+                PresetManager.SaveToClipboard(selectedConfig);
+            }
+        }
+
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled)) {
+            ImGui.SetTooltip("Export selected Hotbar Configuration to clipboard");
         }
     }
 
