@@ -9,7 +9,7 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
 using ExpandedHotbars.Extensions;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using Lumina.Excel.Sheets;
+using Dalamud.Excel.Sheets;
 
 namespace ExpandedHotbars.Conditions;
 

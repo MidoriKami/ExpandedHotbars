@@ -10,7 +10,7 @@ using ExpandedHotbars.Extensions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using Lumina.Excel.Sheets;
+using Dalamud.Excel.Sheets;
 
 namespace ExpandedHotbars.Windows;
 
