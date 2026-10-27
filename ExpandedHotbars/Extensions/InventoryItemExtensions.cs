@@ -33,7 +33,9 @@ public static class InventoryItemExtensions {
             var itemId = item.GetItemId();
             var itemName = ItemUtil.GetItemName(itemId);
 
-            return new Lumina.Text.SeStringBuilder()
+            using var stringBuilder = new RentedSeStringBuilder();
+
+            return stringBuilder
                 .PushColorType(ItemUtil.GetItemRarityColorType(itemId))
                 .Append(itemName)
                 .PopColorType()
