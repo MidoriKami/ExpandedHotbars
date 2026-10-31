@@ -96,7 +96,7 @@ public partial class ConfigWindow {
 
                     ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f + ImGui.ItemSpacing.X);
                     using (ImRaii.Disabled(!condition.HasConfiguration)) {
-                        if (ImGui.Button($"Configure", buttonSize)) {
+                        if (ImGui.Button("Configure", buttonSize)) {
                             ImGui.OpenPopup("ConditionConfigPopup");
                             configuringCondition = condition;
                         }
@@ -108,7 +108,7 @@ public partial class ConfigWindow {
                     ImGui.SameLine(ImGui.TotalWidth * 5.0f / 6.0f + ImGui.ItemSpacing.X);
 
                     using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
-                        if (ImGui.Button($"Delete", buttonSize)) {
+                        if (ImGui.Button("Delete", buttonSize)) {
                             removalOption = condition;
                         }
                     }
