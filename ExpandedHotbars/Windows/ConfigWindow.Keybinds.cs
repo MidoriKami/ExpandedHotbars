@@ -98,6 +98,10 @@ public partial class ConfigWindow {
                 var itemName = item->Name;
                 return (iconId, itemName.ToString());
 
+            case DragDropType.GearSet:
+                var gearsetEntry = RaptureGearsetModule.Instance()->GetGearset((int)info.ActionId);
+                return (62000u + gearsetEntry->ClassJob, gearsetEntry->NameString);
+
             default:
                 if (info.ActionId is not (0 or uint.MaxValue)) {
                     return (60861, $"Unable to Parse Type '{info.DragDropType}'");
