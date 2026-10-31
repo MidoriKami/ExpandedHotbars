@@ -63,7 +63,9 @@ public partial class ConfigWindow {
             using var extrasChild = ImRaii.Child("ExtraOptions", ImGui.Area);
             if (extrasChild) {
                 foreach (var (index, extraFeature) in selectedConfig.ExtraFeatures.Index()) {
-                    if (ImGui.Button(extraFeature.Enabled ? $"Enabled##{index}" : $"Disabled##{index}", new Vector2(ImGui.TotalWidth / 6.0f, ImGui.Scaled(22.0f)))) {
+                    using var id = ImRaii.PushId(index);
+
+                    if (ImGui.Button(extraFeature.Enabled ? "Enabled" : "Disabled", new Vector2(ImGui.TotalWidth / 6.0f, ImGui.Scaled(22.0f)))) {
                         extraFeature.Enabled = !extraFeature.Enabled;
 
                         if (extraFeature.Enabled) {
@@ -81,7 +83,7 @@ public partial class ConfigWindow {
 
                     ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f + ImGui.ItemSpacing.X);
                     using (ImRaii.Disabled(!extraFeature.HasConfiguration)) {
-                        if (ImGui.Button($"Configure##{index}", buttonSize)) {
+                        if (ImGui.Button($"Configure", buttonSize)) {
                             ImGui.OpenPopup("ExtrasConfigPopup");
                             configuringExtra = extraFeature;
                         }
@@ -93,7 +95,7 @@ public partial class ConfigWindow {
                     ImGui.SameLine(ImGui.TotalWidth * 5.0f / 6.0f + ImGui.ItemSpacing.X);
 
                     using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
-                        if (ImGui.Button($"Delete##{index}", buttonSize)) {
+                        if (ImGui.Button($"Delete", buttonSize)) {
                             removalOption = extraFeature;
                         }
                     }

@@ -75,7 +75,9 @@ public partial class ConfigWindow : Window {
         using var itemSpacing = ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, new Vector2(0.0f, 8.0f));
 
         foreach (var (index, option) in System.Config.Hotbars.Index()) {
-            if (ImGui.Selectable($"\t{option.HotbarName}##{index}", selectedConfig == option)) {
+            using var id = ImRaii.PushId(index);
+
+            if (ImGui.Selectable($"\t{option.HotbarName}", selectedConfig == option)) {
                 selectedConfig = option;
             }
         }

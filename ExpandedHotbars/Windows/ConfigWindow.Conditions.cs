@@ -72,7 +72,9 @@ public partial class ConfigWindow {
             using var conditionsChild = ImRaii.Child("ConditionOptions", ImGui.Area);
             if (conditionsChild) {
                 foreach (var (index, condition) in selectedConfig.ShowConditions.Index()) {
-                    if (ImGui.Button(condition.Invert ? $"Disallowed##{index}" : $"Allowed##{index}", new Vector2(ImGui.TotalWidth / 6.0f, ImGui.Scaled(22.0f)))) {
+                    using var id = ImRaii.PushId(index);
+
+                    if (ImGui.Button(condition.Invert ? "Disallowed" : "Allowed", new Vector2(ImGui.TotalWidth / 6.0f, ImGui.Scaled(22.0f)))) {
                         condition.Invert = !condition.Invert;
                         System.Config.Save();
                     }
@@ -94,7 +96,7 @@ public partial class ConfigWindow {
 
                     ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f + ImGui.ItemSpacing.X);
                     using (ImRaii.Disabled(!condition.HasConfiguration)) {
-                        if (ImGui.Button($"Configure##{index}", buttonSize)) {
+                        if (ImGui.Button($"Configure", buttonSize)) {
                             ImGui.OpenPopup("ConditionConfigPopup");
                             configuringCondition = condition;
                         }
@@ -106,7 +108,7 @@ public partial class ConfigWindow {
                     ImGui.SameLine(ImGui.TotalWidth * 5.0f / 6.0f + ImGui.ItemSpacing.X);
 
                     using (ImRaii.Disabled(!IKeyState.Get().DeleteKeybindPressed)) {
-                        if (ImGui.Button($"Delete##{index}", buttonSize)) {
+                        if (ImGui.Button($"Delete", buttonSize)) {
                             removalOption = condition;
                         }
                     }
