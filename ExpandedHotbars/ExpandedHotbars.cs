@@ -61,6 +61,12 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
             HelpMessage = "Show/Hide/Toggle hotbars or the config window",
         });
 
+        ICommandManager.Get().AddHandler("/exhotbars", new CommandInfo(OnCommand) {
+            AllowedInMacros = true,
+            ShowInHelp = false,
+            HelpMessage = "Show/Hide/Toggle hotbars or the config window",
+        });
+
         PluginInterface.UiBuilder.Draw += System.WindowSystem.Draw;
         PluginInterface.UiBuilder.OpenMainUi += System.ConfigWindow.Toggle;
         PluginInterface.UiBuilder.OpenConfigUi += System.ConfigWindow.Toggle;
@@ -73,6 +79,7 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
 
         ICommandManager.Get().RemoveHandler("/expandedhotbars");
         ICommandManager.Get().RemoveHandler("/exhotbar");
+        ICommandManager.Get().RemoveHandler("/exhotbars");
 
         foreach (var window in System.WindowSystem.Windows) {
             window.IsOpen = false;
@@ -87,7 +94,7 @@ public sealed class ExpandedHotbars : IAsyncDalamudPlugin {
     }
 
     private static void OnCommand(string command, string arguments) {
-        if (command is not ("/expandedhotbars" or "/exhotbar")) return;
+        if (command is not ("/expandedhotbars" or "/exhotbar" or "/exhotbars")) return;
 
         switch (arguments.Split(' ', 2)) {
             case null or [] or [ "" ] or [ "", "" ]:

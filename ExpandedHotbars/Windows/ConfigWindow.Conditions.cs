@@ -79,7 +79,18 @@ public partial class ConfigWindow {
 
                     ImGui.SameLine(ImGui.TotalWidth / 6.0f + ImGui.ItemSpacing.X);
                     ImGui.AlignTextToFramePadding();
-                    ImGui.Text(condition.Label);
+
+                    var availableWidth = ImGui.TotalWidth * 2.0f / 3.0f - ImGui.GetCursorPosX();
+                    var cursorStartPosition = ImGui.GetCursorScreenPos();
+                    var clipMax = cursorStartPosition + new Vector2(availableWidth, ImGui.GetTextLineHeightWithSpacing());
+
+                    using (ImRaii.PushClipRect(cursorStartPosition, clipMax)) {
+                        ImGui.Text(condition.Label);
+                    }
+
+                    if (ImGui.IsItemHovered() && ImGui.CalcTextSize(condition.Label).X > availableWidth) {
+                        ImGui.SetTooltip(condition.Label);
+                    }
 
                     ImGui.SameLine(ImGui.TotalWidth * 2.0f / 3.0f + ImGui.ItemSpacing.X);
                     using (ImRaii.Disabled(!condition.HasConfiguration)) {
@@ -109,6 +120,7 @@ public partial class ConfigWindow {
 
                 if (removalOption is { } option) {
                     selectedConfig.ShowConditions.Remove(option);
+                    System.Config.Save();
                 }
             }
 
