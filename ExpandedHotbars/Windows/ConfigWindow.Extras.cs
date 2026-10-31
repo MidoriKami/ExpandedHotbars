@@ -108,6 +108,7 @@ public partial class ConfigWindow {
                 if (removalOption is { } option) {
                     option.OnDisable();
                     selectedConfig.ExtraFeatures.Remove(option);
+                    System.Config.Save();
                 }
             }
 
